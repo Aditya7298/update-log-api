@@ -16,6 +16,13 @@ import {
   editUpdate,
   deleteUpdate,
 } from "./handlers/update";
+import {
+  getUpdatePoint,
+  getUpdatePoints,
+  editUpdatePoint,
+  createUpdatePoint,
+  deleteUpdatePoint,
+} from "./handlers/updatePoint";
 
 import { UPDATE_STATUS } from "./constants";
 
@@ -67,18 +74,14 @@ router.delete("/update/:id", deleteUpdate);
 /**
  * UpdatePoint
  */
-router.get("/updatepoint", () => {});
-router.get("/updatepoint/:id", () => {});
+router.get("/updatepoint", getUpdatePoint);
+router.get("/updatepoint/:id", getUpdatePoints);
 router.patch(
   "/updatepoint/:id",
   body("name").optional().isString(),
   body("description").optional().isString(),
   checkRequestForErrors,
-  (req, res) => {
-    res.status(200).json({
-      message: "Update point updated successfully !!",
-    });
-  }
+  editUpdatePoint
 );
 router.post(
   "/updatepoint",
@@ -86,12 +89,8 @@ router.post(
   body("description").isString(),
   body("updateId").isString(),
   checkRequestForErrors,
-  (req, res) => {
-    res.status(200).json({
-      message: "Update point created successfully !!",
-    });
-  }
+  createUpdatePoint
 );
-router.delete("/updatepoint/:id", () => {});
+router.delete("/updatepoint/:id", deleteUpdatePoint);
 
 export { router };

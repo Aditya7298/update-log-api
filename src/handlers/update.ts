@@ -18,6 +18,19 @@ export const authorizeUpdate = (
   }
 };
 
+export const getUpdateObjFromDb = async (
+  updateId: string
+): Promise<Update & { product: Product }> => {
+  return await db.update.findUnique({
+    where: {
+      id: updateId,
+    },
+    include: {
+      product: true,
+    },
+  });
+};
+
 export const createUpdate = async (req, res) => {
   const { title, body, productId, version, asset, status } = req.body;
   const userId = req.user.id;
@@ -68,14 +81,7 @@ export const getUpdates = async (req, res) => {
 export const getUpdate = async (req, res) => {
   const userId = req.user.id;
 
-  const update = await db.update.findUnique({
-    where: {
-      id: req.params.id,
-    },
-    include: {
-      product: true,
-    },
-  });
+  const update = await getUpdateObjFromDb(req.params.id);
 
   const errorMessage = authorizeUpdate(update, userId);
 
@@ -91,14 +97,7 @@ export const editUpdate = async (req, res) => {
   const userId = req.user.id;
   const { title, body, productId, version, asset, status } = req.body;
 
-  const update = await db.update.findUnique({
-    where: {
-      id: req.params.id,
-    },
-    include: {
-      product: true,
-    },
-  });
+  const update = await getUpdateObjFromDb(req.params.id);
 
   const errorMessage = authorizeUpdate(update, userId);
 
@@ -119,7 +118,6 @@ export const editUpdate = async (req, res) => {
       version,
       asset,
       status,
-      updatedAt: new Date(),
     },
   });
 
@@ -132,14 +130,7 @@ export const deleteUpdate = async (req, res) => {
   const userId = req.user.id;
   const updateId = req.params.id;
 
-  const update = await db.update.findUnique({
-    where: {
-      id: updateId,
-    },
-    include: {
-      product: true,
-    },
-  });
+  const update = await getUpdateObjFromDb(updateId);
 
   const errorMessage = authorizeUpdate(update, userId);
 
