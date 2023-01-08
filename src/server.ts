@@ -8,6 +8,7 @@ import { router } from "./router";
 import { protect } from "./modules/auth";
 import { createUser, signIn } from "./handlers/user";
 import { checkRequestForErrors } from "./modules/errors/checkRequestForErrors";
+import { errorRequestHandler } from "./modules/errors/errorRequestHandler";
 
 const app = express();
 
@@ -34,5 +35,7 @@ app.post(
   checkRequestForErrors,
   signIn
 );
+
+app.use(errorRequestHandler);
 
 export default app;

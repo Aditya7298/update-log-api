@@ -45,26 +45,30 @@ export const getProduct = async (req, res) => {
   });
 };
 
-export const createProduct = async (req, res) => {
-  const { name } = req.body;
-  const userId = req.user.id;
+export const createProduct = async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const userId = req.user.id;
 
-  const user = await db.user.findUnique({
-    where: {
-      id: userId,
-    },
-  });
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
-  const product = await db.product.create({
-    data: {
-      name,
-      belongsToId: user.id,
-    },
-  });
+    const product = await db.product.create({
+      data: {
+        name,
+        belongsToId: user.id,
+      },
+    });
 
-  res.status(200).json({
-    data: product,
-  });
+    res.status(200).json({
+      data: product,
+    });
+  } catch (e) {
+    next(e);
+  }
 };
 
 export const updateProduct = async (req, res) => {

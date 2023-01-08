@@ -2,6 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 
 import { checkRequestForErrors } from "./modules/errors/checkRequestForErrors";
+import { errorRequestHandler } from "./modules/errors/errorRequestHandler";
 import {
   getProducts,
   getProduct,
@@ -92,5 +93,7 @@ router.post(
   createUpdatePoint
 );
 router.delete("/updatepoint/:id", deleteUpdatePoint);
+
+router.use(errorRequestHandler);
 
 export { router };
